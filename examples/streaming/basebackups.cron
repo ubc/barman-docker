@@ -1,0 +1,1 @@
+0 4 * * 0 barman /usr/local/bin/barman backup all >>/var/log/barman/backup.log 2>&1

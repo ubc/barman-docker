@@ -1,0 +1,26 @@
+version: '2'
+services:
+  barman:
+    image: tbeadle/barman:2.1
+    build: ../../
+    depends_on:
+      - pg
+    volumes:
+      # Barman configs
+      - ./barman:/etc/barman:ro
+      # cron job for taking weekly basebackups
+      - ./basebackups.cron:/etc/cron.d/basebackups:ro
+      # The right side of this mount should be set to BARMAN_DATA_DIR.
+      - /var/lib/barman/barman/home:/var/lib/barman
+      # The right side of this mount should be set to BARMAN_LOG_DIR.
+      - /var/lib/barman/barman/logs:/var/log/barman
+      - ./private/barman:/private:ro
+
+  pg:
+    image: tbeadle/postgres:9.5-barman
+    environment:
+      BARMAN_PASSWORD: iamsosecretive
+      STREAMING_PASSWORD: youwillneverguessme
+    volumes:
+      - /var/lib/barman/pg:/var/lib/postgresql/data
+      - ./private/pg:/private:ro
