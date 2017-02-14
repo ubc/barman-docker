@@ -65,3 +65,4 @@ RUN /tmp/install_barman.sh && rm /tmp/install_barman.sh
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["cron", "-L", "0",  "-f"]
 COPY entrypoint.sh /
+WORKDIR ${BARMAN_DATA_DIR}
