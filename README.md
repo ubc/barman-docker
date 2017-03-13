@@ -56,6 +56,7 @@ The following environment variables may be set when starting the container:
 
 | Name | Description |
 | ---- | ----------- |
+| BARMAN_CRON_SRC | This directory holds files that will be copied in to `/etc/cron.d/` and have the correct permissions set so that they will be run via cron.  This can be used as a place to put cron jobs for performing regular basebackups.  Defaults to `/private/cron.d`.
 | BARMAN_DATA_DIR | The location in the container where barman stores the data backed up from the databases.  This should likely be mounted as a volume so that the data persists after the container is stopped or destroyed.  It should also be set as the `barman_home` configuration value in `barman.conf`.  Defaults to `/var/lib/barman`. |
 | BARMAN_LOG_DIR | The location where log files can be stored.  For example, a cron job can be set up to take regular full backups and that can send its logs here.  Defaults to `/var/log/barman`. |
 | BARMAN_SSH_KEY_DIR | This directory in the container (most likely mounted as a volume) should contain SSH private key files that are used when connecting via SSH to the database servers that you're backing up.  This happens if the `backup_method` defined in the barman config for the server is set to `rsync`.  The `ssh_command` for that server should include `-i /home/barman/.ssh/<private_key_filename>`.  Note that the keys are copied from this directory to /home/barman/.ssh/ to ensure ownership/permissions are properly set.  Defaults to /private/ssh. |

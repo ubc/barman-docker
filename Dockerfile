@@ -49,6 +49,7 @@ RUN bash -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main
 # Set up some defaults for file/directory locations used in entrypoint.sh.
 ENV \
 	BARMAN_VERSION=2.1 \
+	BARMAN_CRON_SRC=/private/cron.d \
 	BARMAN_DATA_DIR=/var/lib/barman \
 	BARMAN_LOG_DIR=/var/log/barman \
 	BARMAN_SSH_KEY_DIR=/private/ssh \

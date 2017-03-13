@@ -13,3 +13,8 @@ if [[ -f ${BARMAN_PGPASSFILE} ]]; then
 	echo "Copying ${BARMAN_PGPASSFILE} to ~barman/.pgpass"
 	install -m 0600 -o barman -g barman ${BARMAN_PGPASSFILE} ~barman/.pgpass
 fi
+
+for i in ${BARMAN_CRON_SRC}/*; do
+	echo "Installing ${i} in /etc/cron.d/"
+	install -m 0644 -o root -g root ${i} /etc/cron.d/
+done
