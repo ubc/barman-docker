@@ -16,20 +16,3 @@ pip install barman==${BARMAN_VERSION} requests==2.13.0
 useradd --system --shell /bin/bash barman
 install -d -m 0700 -o barman -g barman ~barman/.ssh
 gosu barman bash -c 'echo -e "Host *\n\tCheckHostIP no" > ~/.ssh/config'
-cat >/etc/crontab <<EOF
-* * * * * barman /usr/local/bin/barman -q cron
-@daily root /usr/sbin/logrotate /etc/logrotate.conf
-EOF
-rm /etc/logrotate.d/*
-cat >/etc/logrotate.conf <<EOF
-${BARMAN_LOG_DIR}/*.log {
-	weekly
-	rotate 4
-	delaycompress
-	compress
-	missingok
-	notifempty
-	create 0640 barman barman
-}
-EOF
-install -d -m 0755 -o barman -g barman ${BARMAN_LOG_DIR}

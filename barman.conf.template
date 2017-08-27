@@ -1,0 +1,27 @@
+; Commented lines show the default values
+
+[barman]
+; archiver = off
+; backup_method = rsync
+; backup_directory = %(barman_home)s/%(name)s
+
+; This must be set to the BARMAN_DATA_DIR environment variable
+barman_home = ${BARMAN_DATA_DIR}
+
+barman_user = barman
+
+; barman_lock_directory = %(barman_home)s
+compression = gzip
+configuration_files_directory = /etc/barman/barman.d
+last_backup_maximum_age = 1 week
+minimum_redundancy = 1
+;network_compression = true
+retention_policy = RECOVERY WINDOW of 3 MONTHS
+; retention_policy_mode = auto
+;reuse_backup = link
+streaming_archiver = on
+; wal_retention_policy = main
+
+; use empty log_file for stderr output
+log_file = ""
+log_level = ${BARMAN_LOG_LEVEL}

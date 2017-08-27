@@ -1,0 +1,8 @@
+[${DB_HOST}]
+active = true
+description =  "PostgreSQL Database (Streaming-Only)"
+conninfo = host=${DB_HOST} user=${DB_SUPERUSER} dbname=${DB_SUPERUSER_DATABASE}
+streaming_conninfo = host=${DB_HOST} user=${DB_REPLICATION_USER}
+backup_method = ${DB_BACKUP_METHOD}
+streaming_archiver = on
+slot_name = ${DB_SLOT_NAME}

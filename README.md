@@ -54,30 +54,24 @@ Currently only streaming of WAL logs is supported.  Using postgres's
 
 The following environment variables may be set when starting the container:
 
-| Name | Description |
-| ---- | ----------- |
-| BARMAN_CRON_SRC | This directory holds files that will be copied in to `/etc/cron.d/` and have the correct permissions set so that they will be run via cron.  This can be used as a place to put cron jobs for performing regular basebackups.  Defaults to `/private/cron.d`.
-| BARMAN_DATA_DIR | The location in the container where barman stores the data backed up from the databases.  This should likely be mounted as a volume so that the data persists after the container is stopped or destroyed.  It should also be set as the `barman_home` configuration value in `barman.conf`.  Defaults to `/var/lib/barman`. |
-| BARMAN_LOG_DIR | The location where log files can be stored.  For example, a cron job can be set up to take regular full backups and that can send its logs here.  Defaults to `/var/log/barman`. |
-| BARMAN_SSH_KEY_DIR | This directory in the container (most likely mounted as a volume) should contain SSH private key files that are used when connecting via SSH to the database servers that you're backing up.  This happens if the `backup_method` defined in the barman config for the server is set to `rsync`.  The `ssh_command` for that server should include `-i /home/barman/.ssh/<private_key_filename>`.  Note that the keys are copied from this directory to /home/barman/.ssh/ to ensure ownership/permissions are properly set.  Defaults to /private/ssh. |
-| BARMAN_PGPASSFILE | The path to a file in the container that is a [pgpass](https://www.postgresql.org/docs/9.6/static/libpq-pgpass.html) file containing the passwords for the users used when connecting to the database servers.  The users are defined by the `conninfo` and `streaming_conninfo` configuration variables for the servers.  This file is copied to `/home/barman/.pgpass` when the container is started.  Defaults to `/private/pgpass`. |
-
-## Notes
-
-If using a replication slot for a server, the slot must be created before streaming replication can start.  If using a `tbeadle/postgres:*-barman` image, this is done automatically for you if the `BARMAN_SLOT_NAME` variable is set, which defaults to `barman`.  If not using that image for your database, you can create the slot from the barman server by running the following command in the container:
-
-```
-gosu barman barman receive-wal --create-slot <name of server in barman config>
-```
-
-The next time `barman cron` runs (which runs every minute), replication will
-start.  In order to take a base backup (using `gosu barman barman backup all`),
-the database needs to have had a transaction.  Once there has been a
-transaction, you can run `gosu barman barman switch-xlog --force <name of
-server>` and then wait for `barman cron` to run again (or run it manually).
-Then you can run `gosu barman barman check <name of server>` to confirm that
-all checks are OK.  Then you can run `gosu barman barman backup <name of
-server>`.
+| Name                               | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| ----                               | -----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| BARMAN_CRON_SRC                    | This directory holds files that will be copied in to `/etc/cron.d/` and have the correct permissions set so that they will be run via cron.  This can be used as a place to put cron jobs for performing regular basebackups.  Defaults to `/private/cron.d`.
+| BARMAN_LOG_DIR                     | The location where log files can be stored.  For example, a cron job can be set up to take regular full backups and that can send its logs here.  Defaults to `/var/log/barman`.                                                                                                                                                                                                                                                                                                                                                                        |
+| BARMAN_SSH_KEY_DIR                 | This directory in the container (most likely mounted as a volume) should contain SSH private key files that are used when connecting via SSH to the database servers that you're backing up.  This happens if the `backup_method` defined in the barman config for the server is set to `rsync`.  The `ssh_command` for that server should include `-i /home/barman/.ssh/<private_key_filename>`.  Note that the keys are copied from this directory to /home/barman/.ssh/ to ensure ownership/permissions are properly set.  Defaults to /private/ssh. |
+| BARMAN_PGPASSFILE                  | The path to a file in the container that is a [pgpass](https://www.postgresql.org/docs/9.6/static/libpq-pgpass.html) file containing the passwords for the users used when connecting to the database servers.  The users are defined by the `conninfo` and `streaming_conninfo` configuration variables for the servers.  This file is copied to `/home/barman/.pgpass` when the container is started.  Defaults to `/private/pgpass`.                                                                                                                 |
+| BARMAN_CRON_SCHEDULE               | `* * * * *`, barman cron running scheduel
+| BARMAN_BACKUP_SCHEDULE             | `0 4 * * *`, barman backup running schedule
+| BARMAN_LOG_LEVEL                   | `INFO`, barman log level
+| DB_HOST                            | `pg`, postgres host name
+| DB_PORT                            | `5432`, postgres port
+| DB_SUPERUSER                       | `postgres`, superuser username
+| DB_SUPERUSER_PASSWORD              | `postgres`, superuser password
+| DB_SUPERUSER_DATABASE              | `postgres`, superuser database
+| DB_REPLICATION_USER                | `standby`, replication username
+| DB_REPLICATION_PASSWORD            | `standby`, replication user password
+| DB_SLOT_NAME                       | `barman`, postgres replication slot name for barman
+| DB_BACKUP_METHOD                   | `postgres`, barman backup method, see barman backup
 
 ## Footnotes:
 
