@@ -26,4 +26,6 @@ if [[ -f /home/barman/.ssh/id_rsa ]]; then
     chmod 600 ~barman/.ssh/id_rsa
 fi
 
+echo "Initializing done"
+
 exec "$@"
