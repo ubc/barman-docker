@@ -73,6 +73,11 @@ The following environment variables may be set when starting the container:
 | DB_SLOT_NAME                       | `barman`, postgres replication slot name for barman
 | DB_BACKUP_METHOD                   | `postgres`, barman backup method, see barman backup
 
+## Volumes
+
+| Path                               | Description
+| /home/barman/.ssh/id_rsa           | the private ssh key that barman will use to connect to remote host when recovery
+
 ## Footnotes:
 
 <a name='barman_docs'><sup>1</sup></a>: [Barman Documentation](http://docs.pgbarman.org/release/2.1/)
