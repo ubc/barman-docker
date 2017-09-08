@@ -52,6 +52,7 @@ ENV \
 	BARMAN_VERSION=2.2 \
 	BARMAN_CRON_SRC=/private/cron.d \
 	BARMAN_DATA_DIR=/var/lib/barman \
+	BARMAN_LOG_DIR=/var/log/barman \
 	BARMAN_SSH_KEY_DIR=/private/ssh \
 	BARMAN_PGPASSFILE=/private/pgpass \
     BARMAN_CRON_SCHEDULE="* * * * *" \
