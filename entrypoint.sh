@@ -6,7 +6,7 @@ install -d -m 0700 -o barman -g barman ${BARMAN_DATA_DIR}
 install -d -m 0755 -o barman -g barman ${BARMAN_LOG_DIR}
 
 echo "Generating cron schedules"
-echo "${BARMAN_CRON_SCHEDULE} barman /usr/local/bin/barman cron" >> /etc/cron.d/barman
+echo "${BARMAN_CRON_SCHEDULE} barman /usr/local/bin/barman receive-wal --create-slot ${DB_HOST}; /usr/local/bin/barman cron" >> /etc/cron.d/barman
 echo "${BARMAN_BACKUP_SCHEDULE} barman /usr/local/bin/barman backup all" >> /etc/cron.d/barman
 
 echo "Generating Barman configurations"
