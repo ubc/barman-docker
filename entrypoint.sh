@@ -19,6 +19,7 @@ chmod 600 /home/barman/.pgpass
 
 echo "Checking/Creating replication slot"
 barman replication-status ${DB_HOST} --minimal --target=wal-streamer | grep barman || barman receive-wal --create-slot ${DB_HOST}
+barman replication-status ${DB_HOST} --minimal --target=wal-streamer | grep barman || barman receive-wal --reset ${DB_HOST}
 
 if [[ -f /home/barman/.ssh/id_rsa ]]; then
     echo "Setting up Barman private key"
