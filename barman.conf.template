@@ -2,8 +2,10 @@
 
 [barman]
 ; archiver = off
-; backup_method = rsync
+backup_method = rsync
 ; backup_directory = %(barman_home)s/%(name)s
+
+backup_options = concurrent_backup
 
 ; This must be set to the BARMAN_DATA_DIR environment variable
 barman_home = ${BARMAN_DATA_DIR}
