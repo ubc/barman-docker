@@ -1,10 +1,10 @@
-FROM debian:jessie
+FROM debian:buster
 
 # Install gosu
 ENV GOSU_VERSION=1.11
 
 RUN apt-get update \
-	&& apt-get install -y --no-install-recommends ca-certificates wget \
+	&& apt-get install -y --no-install-recommends ca-certificates wget gnupg2 \
 	&& dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" \
 	&& wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch" \
 	&& wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc" \
@@ -27,7 +27,7 @@ RUN apt-get update \
 #   python: Needed to run barman
 #   rsync: Needed to rsync basebackups from the database servers
 #   gettext-base: envsubst
-RUN bash -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main" >> /etc/apt/sources.list.d/pgdg.list' \
+RUN bash -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main" >> /etc/apt/sources.list.d/pgdg.list' \
 	&& (wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -) \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends \
@@ -36,9 +36,11 @@ RUN bash -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main
 		libpq-dev \
 		libpython-dev \
 		openssh-client \
-		postgresql-client-9.4 \
 		postgresql-client-9.5 \
 		postgresql-client-9.6 \
+		postgresql-client-10 \
+		postgresql-client-11 \
+		postgresql-client-12 \
 		python \
 		rsync \
         gettext-base \
@@ -49,7 +51,7 @@ RUN bash -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main
 
 # Set up some defaults for file/directory locations used in entrypoint.sh.
 ENV \
-	BARMAN_VERSION=2.7 \
+	BARMAN_VERSION=2.10 \
 	BARMAN_CRON_SRC=/private/cron.d \
 	BARMAN_DATA_DIR=/var/lib/barman \
 	BARMAN_LOG_DIR=/var/log/barman \
