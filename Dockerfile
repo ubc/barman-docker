@@ -34,14 +34,15 @@ RUN bash -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main
 		cron \
 		gcc \
 		libpq-dev \
-		libpython-dev \
+		libpython3-dev \
 		openssh-client \
 		postgresql-client-9.5 \
 		postgresql-client-9.6 \
 		postgresql-client-10 \
 		postgresql-client-11 \
 		postgresql-client-12 \
-		python \
+		python3 \
+        python3-distutils \
 		rsync \
         gettext-base \
 	&& rm -rf /var/lib/apt/lists/* \
@@ -75,6 +76,10 @@ COPY install_barman.sh /tmp/
 RUN /tmp/install_barman.sh && rm /tmp/install_barman.sh
 COPY barman.conf.template /etc/barman.conf.template
 COPY pg.conf.template /etc/barman/barman.d/pg.conf.template
+
+# Install barman exporter
+RUN pip install barman-exporter && mkdir /node_exporter
+VOLUME /node_exporter
 
 ENV TINI_VERSION v0.18.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini

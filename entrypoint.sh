@@ -8,6 +8,9 @@ install -d -m 0755 -o barman -g barman ${BARMAN_LOG_DIR}
 echo "Generating cron schedules"
 echo "${BARMAN_CRON_SCHEDULE} barman /usr/local/bin/barman receive-wal --create-slot ${DB_HOST}; /usr/local/bin/barman cron" >> /etc/cron.d/barman
 echo "${BARMAN_BACKUP_SCHEDULE} barman /usr/local/bin/barman backup all" >> /etc/cron.d/barman
+# run barman exporter every hour
+echo "0 * * * * barman barman-exporter -f /node_exporter/barman.prom"
+
 
 echo "Generating Barman configurations"
 cat /etc/barman.conf.template | envsubst > /etc/barman.conf
