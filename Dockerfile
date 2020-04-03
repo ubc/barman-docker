@@ -45,6 +45,7 @@ RUN bash -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main
         python3-distutils \
 		rsync \
         gettext-base \
+        procps \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& rm -f /etc/crontab /etc/cron.*/* \
 	&& sed -i 's/\(.*pam_loginuid.so\)/#\1/' /etc/pam.d/cron \
@@ -69,7 +70,11 @@ ENV \
     DB_REPLICATION_USER=standby \
     DB_REPLICATION_PASSWORD=standby \
     DB_SLOT_NAME=barman \
-    DB_BACKUP_METHOD=postgres
+    DB_BACKUP_METHOD=postgres \
+    BARMAN_EXPORTER_SCHEDULE="*/5 * * * *" \
+    BARMAN_EXPORTER_LISTEN_ADDRESS="0.0.0.0" \
+    BARMAN_EXPORTER_LISTEN_PORT=9780 \
+    BARMAN_EXPORTER_CACHE_TIME_=3600
 VOLUME ${BARMAN_DATA_DIR}
 
 COPY install_barman.sh /tmp/
