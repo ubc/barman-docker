@@ -86,7 +86,7 @@ RUN gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 595E85A6B1B
  && gpg --verify /tini.asc \
  && chmod +x /tini
 
-CMD ["cron", "-L", "0",  "-f"]
+CMD ["cron", "-L", "4",  "-f"]
 COPY entrypoint.sh /
 WORKDIR ${BARMAN_DATA_DIR}
 
