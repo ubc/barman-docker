@@ -6,10 +6,8 @@ install -d -m 0700 -o barman -g barman ${BARMAN_DATA_DIR}
 install -d -m 0755 -o barman -g barman ${BARMAN_LOG_DIR}
 
 echo "Generating cron schedules"
-echo "${BARMAN_CRON_SCHEDULE} barman /usr/local/bin/barman receive-wal --create-slot ${DB_HOST}; /usr/local/bin/barman cron" >> /etc/cron.d/barman
-echo "${BARMAN_BACKUP_SCHEDULE} barman /usr/local/bin/barman backup all" >> /etc/cron.d/barman
-# run barman exporter every hour
-echo "${BARMAN_EXPORTER_SCHEDULE} barman /bin/ps ax|grep [b]arman-exporter || exec /usr/local/bin/barman-exporter -l ${BARMAN_EXPORTER_LISTEN_ADDRESS}:${BARMAN_EXPORTER_LISTEN_PORT} -c ${BARMAN_EXPORTER_CACHE_TIME}" >> /etc/cron.d/barman
+echo "${BARMAN_CRON_SCHEDULE} barman /usr/local/bin/barman receive-wal --create-slot ${DB_HOST}; /usr/local/bin/barman cron > /proc/1/fd/1 2>/proc/1/fd/2" >> /etc/cron.d/barman
+echo "${BARMAN_BACKUP_SCHEDULE} barman /usr/local/bin/barman backup all > /proc/1/fd/1 2>/proc/1/fd/2" >> /etc/cron.d/barman
 
 
 echo "Generating Barman configurations"
@@ -32,5 +30,9 @@ if [[ -f /home/barman/.ssh/id_rsa ]]; then
 fi
 
 echo "Initializing done"
+
+# run barman exporter every hour
+exec /usr/local/bin/barman-exporter -l ${BARMAN_EXPORTER_LISTEN_ADDRESS}:${BARMAN_EXPORTER_LISTEN_PORT} -c ${BARMAN_EXPORTER_CACHE_TIME} &
+echo "Started Barman exporter on ${BARMAN_EXPORTER_LISTEN_ADDRESS}:${BARMAN_EXPORTER_LISTEN_PORT}"
 
 exec "$@"
