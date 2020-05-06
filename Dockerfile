@@ -74,6 +74,7 @@ COPY install_barman.sh /tmp/
 RUN /tmp/install_barman.sh && rm /tmp/install_barman.sh
 COPY barman.conf.template /etc/barman.conf.template
 COPY pg.conf.template /etc/barman/barman.d/pg.conf.template
+COPY wal_archiver.py /usr/local/lib/python3.7/dist-packages/barman/wal_archiver.py
 
 # Install barman exporter
 RUN pip install barman-exporter && mkdir /node_exporter
