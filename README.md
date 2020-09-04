@@ -75,8 +75,9 @@ The following environment variables may be set when starting the container:
 
 ## Volumes
 
-| Path                               | Description
-| /home/barman/.ssh/id_rsa           | the private ssh key that barman will use to connect to remote host when recovery
+| Path                     | Description                                                                      |
+|--------------------------|----------------------------------------------------------------------------------|
+| /home/barman/.ssh/id_rsa | The private ssh key that barman will use to connect to remote host when recovery |
 
 ## Footnotes:
 
