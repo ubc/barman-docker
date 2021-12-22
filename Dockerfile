@@ -1,10 +1,7 @@
-FROM debian:buster
-
-# Install gosu
-ENV GOSU_VERSION=1.11
+FROM debian:bullseye
 
 RUN apt-get update \
-	&& apt-get install -y --no-install-recommends ca-certificates wget gnupg2 gosu\
+	&& apt-get install -y --no-install-recommends ca-certificates wget gnupg2 gosu tini\
 	&& rm -rf /var/lib/apt/lists/* \
     # verify that the binary works
     && gosu nobody true
@@ -20,7 +17,7 @@ RUN apt-get update \
 #   python: Needed to run barman
 #   rsync: Needed to rsync basebackups from the database servers
 #   gettext-base: envsubst
-RUN bash -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main" >> /etc/apt/sources.list.d/pgdg.list' \
+RUN bash -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main" >> /etc/apt/sources.list.d/pgdg.list' \
 	&& (wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -) \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends \
@@ -34,6 +31,8 @@ RUN bash -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main
 		postgresql-client-10 \
 		postgresql-client-11 \
 		postgresql-client-12 \
+		postgresql-client-13 \
+		postgresql-client-14 \
 		python3 \
         python3-distutils \
 		rsync \
@@ -46,7 +45,7 @@ RUN bash -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main
 
 # Set up some defaults for file/directory locations used in entrypoint.sh.
 ENV \
-	BARMAN_VERSION=2.10 \
+	BARMAN_VERSION=2.17 \
 	BARMAN_CRON_SRC=/private/cron.d \
 	BARMAN_DATA_DIR=/var/lib/barman \
 	BARMAN_LOG_DIR=/var/log/barman \
@@ -79,13 +78,6 @@ COPY wal_archiver.py /usr/local/lib/python3.7/dist-packages/barman/wal_archiver.
 # Install barman exporter
 RUN pip install barman-exporter && mkdir /node_exporter
 VOLUME /node_exporter
-
-ENV TINI_VERSION v0.18.0
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini.asc /tini.asc
-RUN gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7 \
- && gpg --verify /tini.asc \
- && chmod +x /tini
 
 CMD ["cron", "-L", "4",  "-f"]
 COPY entrypoint.sh /
