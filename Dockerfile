@@ -87,4 +87,4 @@ WORKDIR ${BARMAN_DATA_DIR}
 # the CMD which, by default, starts cron.  The 'barman -q cron' job will get
 # pg_receivexlog running.  Cron may also have jobs installed to run
 # 'barman backup' periodically.
-ENTRYPOINT ["/tini", "--", "/entrypoint.sh"]
+ENTRYPOINT ["tini", "--", "/entrypoint.sh"]
