@@ -79,12 +79,12 @@ COPY wal_archiver.py /usr/local/lib/python3.7/dist-packages/barman/wal_archiver.
 RUN pip install barman-exporter && mkdir /node_exporter
 VOLUME /node_exporter
 
-CMD ["cron", "-L", "4",  "-f"]
-COPY entrypoint.sh /
-WORKDIR ${BARMAN_DATA_DIR}
-
 # Install the entrypoint script.  It will set up ssh-related things and then run
 # the CMD which, by default, starts cron.  The 'barman -q cron' job will get
 # pg_receivexlog running.  Cron may also have jobs installed to run
 # 'barman backup' periodically.
 ENTRYPOINT ["tini", "--", "/entrypoint.sh"]
+CMD ["cron", "-L", "4",  "-f"]
+COPY entrypoint.sh /
+WORKDIR ${BARMAN_DATA_DIR}
+
