@@ -50,7 +50,6 @@ ENV \
 	BARMAN_DATA_DIR=/var/lib/barman \
 	BARMAN_LOG_DIR=/var/log/barman \
 	BARMAN_SSH_KEY_DIR=/private/ssh \
-	BARMAN_PGPASSFILE=/private/pgpass \
     BARMAN_CRON_SCHEDULE="* * * * *" \
     BARMAN_BACKUP_SCHEDULE="0 4 * * *" \
     BARMAN_LOG_LEVEL=INFO \
