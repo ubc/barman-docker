@@ -1,9 +1,13 @@
-version: '2'
+version: '3'
 services:
   barman:
     image: sharathrapyuta/barman:3.4.0
-    build: .
+    build:
+      context: .
+    network_mode: host
     container_name: barman
     restart: always
     env_file:
       - barman-variables.env
+    volumes:
+      - /var/lib/barman/barman/logs:/var/log/barman

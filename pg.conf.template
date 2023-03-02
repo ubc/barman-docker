@@ -1,8 +1,40 @@
-[${DB_HOST}]
-active = true
+; Barman, Backup and Recovery Manager for PostgreSQL
+; https://www.pgbarman.org/ - https://www.enterprisedb.com/
+;
+; Template configuration file for a server using
+; only streaming replication protocol
+;
+
+[pg-barman]
+; Human readable description
 description =  "PostgreSQL Database (Streaming-Only)"
-conninfo = host=${DB_HOST} user=${DB_SUPERUSER} dbname=${DB_SUPERUSER_DATABASE}
-streaming_conninfo = host=${DB_HOST} user=${DB_REPLICATION_USER}
+
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; PostgreSQL connection string (mandatory)
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+conninfo = host=${DB_HOST} user=${DB_SUPERUSER} dbname=${DB_SUPERUSER_DATABASE} application_name=postgresql
+
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; PostgreSQL streaming connection string
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; To be used by pg_basebackup for backup and pg_receivewal for WAL streaming
+; NOTE: streaming_barman is a regular user with REPLICATION privilege
+streaming_conninfo = host=${DB_HOST} user=${DB_REPLICATION_USER} application_name=postgresql
+
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Backup settings (via pg_basebackup)
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 backup_method = ${DB_BACKUP_METHOD}
+;streaming_backup_name = barman_streaming_backup
+
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; WAL streaming settings (via pg_receivewal)
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 streaming_archiver = on
 slot_name = ${DB_SLOT_NAME}
+create_slot = auto
+;streaming_archiver_name = barman_receive_wal
+;streaming_archiver_batch_size = 50
+
+; PATH setting for this server
+path_prefix = "/usr/lib/postgresql/15/bin"
