@@ -22,7 +22,6 @@ backup_options = concurrent_backup
 ; archiver = off
 ; Streaming_archiver needs to be turned on for wal streaming
 streaming_archiver = on
-; wal_retention_policy = main
 ;reuse_backup = link
 retention_policy_mode = auto
 ;streaming_wals_directory = %(backup_directory)s/streaming
@@ -31,7 +30,7 @@ retention_policy_mode = auto
 ;barman_lock_directory = %(barman_home)s
 
 ; Log location
-log_file = /var/log/barman/barman.log
+log_file = ${BARMAN_LOG_DIR}/barman.log
 
 ; Log level (see https://docs.python.org/3/library/logging.html#levels)
 log_level = ${BARMAN_LOG_LEVEL}
@@ -64,7 +63,7 @@ compression = gzip
 ;post_wal_delete_script = env | grep ^BARMAN
 
 ; Global bandwidth limit in kilobytes per second - default 0 (meaning no limit)
-;bandwidth_limit = 4000
+bandwidth_limit = ${BARMAN_BANDWIDTH_LIMIT}
 
 ; Number of parallel jobs for backup and recovery via rsync (default 1)
 ;parallel_jobs = 1
@@ -100,7 +99,7 @@ last_backup_maximum_age = 1 week
 ; Syntax for this option is: "i (DAYS | WEEKS | MONTHS | HOURS)" where i is an
 ; integer > 0
 ;last_wal_maximum_age =
-; wal_retention_policy = main
+wal_retention_policy = main
 
 ; Minimum number of required backups (redundancy)
 ;minimum_redundancy = 1
@@ -112,4 +111,5 @@ last_backup_maximum_age = 1 week
 ; Retention policy (based on redundancy)
 ;retention_policy = REDUNDANCY 2
 ; Retention policy (based on recovery window)
-retention_policy = RECOVERY WINDOW OF 7  DAYS
+;retention_policy = RECOVERY WINDOW OF 7  DAYS
+retention_policy = ${BARMAN_RETENTION_POLICY}
