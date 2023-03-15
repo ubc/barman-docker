@@ -27,7 +27,7 @@ if [[ -f /home/barman/.ssh/id_rsa ]]; then
     chown barman:barman -R ~barman/.ssh
     chmod 600 ~barman/.ssh/id_rsa
 fi
-
+gosu barman bash -c "sshpass -p ubuntu@Rapyuta ssh-copy-id -i ~/assets/id_rsa.pub ${REMOTE_USERNAME}@${DB_HOST}"
 echo "Initializing done"
 
 # run barman exporter every hour

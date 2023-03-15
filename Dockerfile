@@ -39,6 +39,7 @@ RUN bash -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg ma
 		rsync \
         gettext-base \
         procps \
+        sshpass \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& rm -f /etc/crontab /etc/cron.*/* \
 	&& sed -i 's/\(.*pam_loginuid.so\)/#\1/' /etc/pam.d/cron \
@@ -59,8 +60,8 @@ ENV \
     DB_SUPERUSER=postgres \
     DB_SUPERUSER_PASSWORD=postgres \
     DB_SUPERUSER_DATABASE=postgres \
-    DB_REPLICATION_USER=standby \
-    DB_REPLICATION_PASSWORD=standby \
+    DB_REPLICATION_USER=barman \
+    DB_REPLICATION_PASSWORD=superbarman \
     DB_SLOT_NAME=barman \
     DB_BACKUP_METHOD=postgres \
     BARMAN_EXPORTER_SCHEDULE="*/5 * * * *" \
@@ -69,7 +70,8 @@ ENV \
     BARMAN_EXPORTER_CACHE_TIME=3600 \
     BARMAN_BANDWIDTH_LIMIT=4000 \
     BARMAN_RETENTION_POLICY="REDUNDANCY 7" \
-    PATH_PREFIX="/usr/lib/postgresql/15/bin"
+    PATH_PREFIX="/usr/lib/postgresql/15/bin" \
+    REMOTE_USERNAME=rr
 VOLUME ${BARMAN_DATA_DIR}
 
 COPY install_barman.sh /tmp/
