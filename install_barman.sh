@@ -21,4 +21,4 @@ mkdir ~barman/assets
 chown barman:barman ~barman/assets
 gosu barman bash -c 'ssh-keygen -t rsa -f ~/assets/id_rsa'
 
-gosu barman bash -c 'echo -e "Host *\n\tCheckHostIP no" > ~/.ssh/config'
+gosu barman bash -c 'echo -e "Host *\n\tCheckHostIP no\n\tStrictHostKeyChecking no" > ~/.ssh/config'
