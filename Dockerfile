@@ -71,7 +71,8 @@ ENV \
     BARMAN_BANDWIDTH_LIMIT=4000 \
     BARMAN_RETENTION_POLICY="REDUNDANCY 7" \
     PATH_PREFIX="/usr/lib/postgresql/15/bin" \
-    REMOTE_USERNAME=rr
+    REMOTE_SSH_USERNAME=ubuntu \
+    REMOTE_SSH_PASSWORD=""
 VOLUME ${BARMAN_DATA_DIR}
 
 COPY install_barman.sh /tmp/
