@@ -7,7 +7,7 @@ install -d -m 0755 -o barman -g barman ${BARMAN_LOG_DIR}
 
 echo "Generating cron schedules"
 echo "${BARMAN_CRON_SCHEDULE} barman /usr/local/bin/barman receive-wal --create-slot ${DB_HOST}; /usr/local/bin/barman cron 2>&1 >> ${BARMAN_LOG_DIR}/barman-cron.log" >> /etc/cron.d/barman
-echo "${BARMAN_BACKUP_SCHEDULE} barman /usr/local/bin/barman backup all 2>&1 >> ${BARMAN_LOG_DIR}/barman-cron.log" >> /etc/cron.d/barman
+echo "${BARMAN_BACKUP_SCHEDULE} barman /usr/local/bin/barman backup --wait --jobs 4 all 2>&1 >> ${BARMAN_LOG_DIR}/barman-cron.log" >> /etc/cron.d/barman
 
 echo "Generating Barman configurations"
 cat /etc/barman.conf.template | envsubst > /etc/barman.conf
@@ -28,7 +28,7 @@ if [[ -f /home/barman/.ssh/id_rsa ]]; then
     chmod 600 ~barman/.ssh/id_rsa
 fi
 
-echo "Copying public key to ${DB_HOST} host"
+echo "* Copying public key to ${DB_HOST} host *"
 gosu barman bash -c "sshpass -p ${REMOTE_SSH_PASSWORD} ssh-copy-id -i ~/assets/id_rsa.pub ${REMOTE_SSH_USERNAME}@${DB_HOST}"
 echo "Initializing done"
 
