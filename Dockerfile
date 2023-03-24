@@ -72,7 +72,8 @@ ENV \
     BARMAN_RETENTION_POLICY="REDUNDANCY 7" \
     PATH_PREFIX="/usr/lib/postgresql/15/bin" \
     REMOTE_SSH_USERNAME=ubuntu \
-    REMOTE_SSH_PASSWORD=""
+    REMOTE_SSH_PASSWORD="" \
+    DB_CONF_SERVER_NAME="pg"
 VOLUME ${BARMAN_DATA_DIR}
 
 COPY install_barman.sh /tmp/

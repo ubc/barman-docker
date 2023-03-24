@@ -5,7 +5,7 @@
 ; only streaming replication protocol
 ;
 
-[pg-barman]
+[${DB_CONF_SERVER_NAME}]
 ; Human readable description
 description =  "PostgreSQL Database (Streaming-Only)"
 

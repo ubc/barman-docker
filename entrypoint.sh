@@ -6,20 +6,20 @@ install -d -m 0700 -o barman -g barman ${BARMAN_DATA_DIR}
 install -d -m 0755 -o barman -g barman ${BARMAN_LOG_DIR}
 
 echo "Generating cron schedules"
-echo "${BARMAN_CRON_SCHEDULE} barman /usr/local/bin/barman receive-wal --create-slot ${DB_HOST}; /usr/local/bin/barman cron 2>&1 >> ${BARMAN_LOG_DIR}/barman-cron.log" >> /etc/cron.d/barman
+echo "${BARMAN_CRON_SCHEDULE} barman /usr/local/bin/barman receive-wal --create-slot ${DB_CONF_SERVER_NAME}; /usr/local/bin/barman cron 2>&1 >> ${BARMAN_LOG_DIR}/barman-cron.log" >> /etc/cron.d/barman
 echo "${BARMAN_BACKUP_SCHEDULE} barman /usr/local/bin/barman backup --wait --jobs 4 all 2>&1 >> ${BARMAN_LOG_DIR}/barman-cron.log" >> /etc/cron.d/barman
 
 echo "Generating Barman configurations"
 cat /etc/barman.conf.template | envsubst > /etc/barman.conf
-cat /etc/barman/barman.d/pg.conf.template | envsubst > /etc/barman/barman.d/${DB_HOST}.conf
+cat /etc/barman/barman.d/pg.conf.template | envsubst > /etc/barman/barman.d/${DB_CONF_SERVER_NAME}.conf
 echo "${DB_HOST}:${DB_PORT}:*:${DB_SUPERUSER}:${DB_SUPERUSER_PASSWORD}" > /home/barman/.pgpass
 echo "${DB_HOST}:${DB_PORT}:*:${DB_REPLICATION_USER}:${DB_REPLICATION_PASSWORD}" >> /home/barman/.pgpass
 chown barman:barman /home/barman/.pgpass
 chmod 600 /home/barman/.pgpass
 
 echo "Checking/Creating replication slot"
-barman replication-status ${DB_HOST} --minimal --target=wal-streamer | grep barman || barman receive-wal --create-slot ${DB_HOST}
-barman replication-status ${DB_HOST} --minimal --target=wal-streamer | grep barman || barman receive-wal --reset ${DB_HOST}
+barman replication-status ${DB_CONF_SERVER_NAME} --minimal --target=wal-streamer | grep barman || barman receive-wal --create-slot ${DB_CONF_SERVER_NAME}
+barman replication-status ${DB_CONF_SERVER_NAME} --minimal --target=wal-streamer | grep barman || barman receive-wal --reset ${DB_CONF_SERVER_NAME}
 
 if [[ -f /home/barman/.ssh/id_rsa ]]; then
     echo "Setting up Barman private key"

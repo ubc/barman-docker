@@ -4,8 +4,9 @@ services:
     image: sharathrapyuta/barman:3.4.0
     build:
       context: .
-    ports:
-      - 9780:9780
+    network_mode: host
+#    ports:
+#      - 9780:9780
     container_name: barman
     hostname: barman
     restart: always
@@ -13,5 +14,5 @@ services:
       - barman-variables.env
     volumes:
       - /var/lib/barman/barman/logs:/var/log/barman
-    extra_hosts:
-      - "pg-barman:172.16.4.196"
+#    extra_hosts:
+#      - "pg-barman:127.0.0.1"
