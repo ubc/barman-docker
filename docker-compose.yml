@@ -13,6 +13,7 @@ services:
     env_file:
       - barman-variables.env
     volumes:
-      - /var/lib/barman/barman/logs:/var/log/barman
+      - /var/lib/barman/barman:/var/lib/barman
+      - /var/lib/barman/logs:/var/log/barman
 #    extra_hosts:
 #      - "pg-barman:127.0.0.1"
