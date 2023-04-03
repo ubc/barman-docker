@@ -1,12 +1,10 @@
 version: '3'
 services:
   barman:
-    image: sharathrapyuta/barman:3.4.0
+    image: quay.io/rapyuta/barman:3.5.0
     build:
       context: .
     network_mode: host
-#    ports:
-#      - 9780:9780
     container_name: barman
     hostname: barman
     restart: always
@@ -15,5 +13,3 @@ services:
     volumes:
       - /var/lib/barman/barman:/var/lib/barman
       - /var/lib/barman/logs:/var/log/barman
-#    extra_hosts:
-#      - "pg-barman:127.0.0.1"
