@@ -7,6 +7,11 @@ Recovery Manager for PostgreSQL."
 It is easily used in conjunction with the `tbeadle/postgres:<version>-barman`
 images at https://hub.docker.com/r/tbeadle/postgres/.
 
+Rapyuta-chart : [Barman-chart](https://github.com/rapyuta-robotics/rapyuta-charts/tree/devel/incubator/barman)
+
+Rapyuta-chart documentation: [Barman-chart documentation](https://github.com/rapyuta-robotics/rapyuta-charts/tree/devel/incubator/barman)
+
+
 ## Getting the image
 
 `docker-compose pull`
