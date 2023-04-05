@@ -1,7 +1,7 @@
 version: '3'
 services:
   barman:
-    image: quay.io/rapyuta/barman:3.5.0
+    image: quay.io/rapyuta/barman:3.5.0-cloud
     build:
       context: .
     network_mode: host

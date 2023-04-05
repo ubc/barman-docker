@@ -40,6 +40,7 @@ RUN bash -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg ma
         gettext-base \
         procps \
         sshpass \
+        curl \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& rm -f /etc/crontab /etc/cron.*/* \
 	&& sed -i 's/\(.*pam_loginuid.so\)/#\1/' /etc/pam.d/cron \
@@ -73,13 +74,18 @@ ENV \
     PATH_PREFIX="/usr/lib/postgresql/15/bin" \
     REMOTE_SSH_USERNAME=ubuntu \
     REMOTE_SSH_PASSWORD="" \
-    DB_CONF_SERVER_NAME="pg"
+    DB_CONF_SERVER_NAME="pg" \
+    AZURE_STORAGE_ACCOUNT=""
 VOLUME ${BARMAN_DATA_DIR}
 
 COPY install_barman.sh /tmp/
 RUN /tmp/install_barman.sh && rm /tmp/install_barman.sh
 COPY barman.conf.template /etc/barman.conf.template
 COPY pg.conf.template /etc/barman/barman.d/pg.conf.template
+
+# Install azure related
+RUN pip3 install azure-storage-blob azure-identity \
+    && curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
 # Install barman exporter
 RUN pip install barman-exporter && mkdir /node_exporter

@@ -42,7 +42,7 @@ compression = gzip
 ;pre_backup_script = env | grep ^BARMAN
 ;pre_backup_retry_script = env | grep ^BARMAN
 ;post_backup_retry_script = env | grep ^BARMAN
-;post_backup_script = env | grep ^BARMAN
+post_backup_script = 'barman-cloud-backup --cloud-provider azure-blob-storage https://${AZURE_STORAGE_ACCOUNT}.blob.core.windows.net/${DB_CONF_SERVER_NAME}  ${DB_CONF_SERVER_NAME}'
 
 ; Pre/post archive hook scripts
 ;pre_archive_script = env | grep ^BARMAN

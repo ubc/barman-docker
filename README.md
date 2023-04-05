@@ -20,13 +20,15 @@ Rapyuta-chart documentation: [Barman-chart documentation](https://github.com/rap
 
 If you would like to build the image yourself, simply run:
 
-`docker-compose build`
+`docker compose build barman`
 
 ## Running the image
 
 Running the image can be as simple as
 
-`docker-compose up`
+`docker compose up barman`
+
+Note: Barman requires postgresql to be up and running
 
 but you will likely want to create your own `docker-compose.yml` file to define
 volumes that will be mounted for persistent data.  See the ***Environment
@@ -36,7 +38,11 @@ The barman program is run inside the container as the `barman` user.  If you
 enter a shell in the container and want to run barman commands, make sure to run
 them as the `barman` user using `gosu barman <barman command>`.  For example:
 
+```bash
+docker exec -it barman /bin/bash
 ```
+
+```bash
 gosu barman barman check all
 gosu barman barman backup all
 ```
