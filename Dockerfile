@@ -6,8 +6,8 @@ RUN apt-get update \
     # verify that the binary works
     && gosu nobody true
 
-# Install postgres 9.4, 9.5, 9.6 clients.  This is so that barman can use the
-# appropriate version when using pg_basebackup.
+# Install postgres clients so that barman can use the appropriate version when
+# using pg_basebackup.
 # Install some other requirements as well.
 #   cron: For scheduling base backups
 #   gcc: For building psycopg2
@@ -33,6 +33,7 @@ RUN bash -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg ma
 		postgresql-client-12 \
 		postgresql-client-13 \
 		postgresql-client-14 \
+		postgresql-client-15 \
 		python3 \
         python3-distutils \
 		rsync \
