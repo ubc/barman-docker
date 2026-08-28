@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:bookworm
 
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends ca-certificates wget gnupg2 gosu tini\
@@ -17,7 +17,7 @@ RUN apt-get update \
 #   python: Needed to run barman
 #   rsync: Needed to rsync basebackups from the database servers
 #   gettext-base: envsubst
-RUN bash -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main" >> /etc/apt/sources.list.d/pgdg.list' \
+RUN bash -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ bookworm-pgdg main" >> /etc/apt/sources.list.d/pgdg.list' \
 	&& (wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -) \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends \
@@ -48,7 +48,7 @@ RUN bash -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg ma
 
 # Set up some defaults for file/directory locations used in entrypoint.sh.
 ENV \
-	BARMAN_VERSION=3.4.1 \
+	BARMAN_VERSION=3.9.0 \
 	BARMAN_CRON_SRC=/private/cron.d \
 	BARMAN_DATA_DIR=/var/lib/barman \
 	BARMAN_LOG_DIR=/var/log/barman \
