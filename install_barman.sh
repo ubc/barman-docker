@@ -2,6 +2,7 @@
 
 set -exo pipefail
 shopt -s nullglob
+set -x
 
 # Install barman
 # Create a 'barman' user that it will run as.
@@ -12,7 +13,7 @@ shopt -s nullglob
 wget -O - https://bootstrap.pypa.io/get-pip.py | python3 -
 # Requests isn't actually necessary, but it can be useful for barman hook scripts
 # for notification of the backup status.
-pip install barman==${BARMAN_VERSION} requests==2.23.0
+pip install --break-system-packages barman==${BARMAN_VERSION} requests==2.23.0 
 useradd --system --shell /bin/bash barman
 install -d -m 0700 -o barman -g barman ~barman/.ssh
 gosu barman bash -c 'echo -e "Host *\n\tCheckHostIP no" > ~/.ssh/config'
